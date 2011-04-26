@@ -33,7 +33,6 @@ bashcomp_DATA = abook \
 		cvs \
 		cvsps \
 		dd \
-		defaults \
 		dhclient \
 		dict \
 		dpkg \
@@ -73,7 +72,6 @@ bashcomp_DATA = abook \
 		k3b \
 		kldload \
 		larch \
-		launchctl \
 		ldapvi \
 		lftp \
 		lilo \
@@ -107,7 +105,6 @@ bashcomp_DATA = abook \
 		net-tools \
 		nmap \
 		ntpdate \
-		open \
 		openldap \
 		openssl \
 		open-iscsi \
@@ -182,8 +179,7 @@ bashcomp_DATA = abook \
 		xsltproc \
 		xz \
 		yp-tools \
-		yum-arch \
-		xcodebuild
+		yum-arch
 
 EXTRA_DIST = $(bashcomp_DATA) \
 	     _mock _modules _subversion _yum _yum-utils
