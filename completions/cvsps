@@ -1,11 +1,11 @@
 # bash completion for cvsps
 
-have cvsps || return
-
+have cvsps &&
 _cvsps()
 {
-    local cur prev words cword
-    _init_completion -n : || return
+    COMPREPLY=()
+    local cur prev
+    _get_comp_words_by_ref -n : cur prev
 
     case $prev in
         -h|-z|-f|-d|-l|--diff-opts|--debuglvl)

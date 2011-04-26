@@ -1,11 +1,11 @@
 # iftop(8) completion
 
-have iftop || return
-
+have iftop &&
 _iftop()
 {
-    local cur prev words cword
-    _init_completion || return
+    COMPREPLY=()
+    local cur prev
+    _get_comp_words_by_ref cur prev
 
     case $prev in
         -h|-f|-F|-m)

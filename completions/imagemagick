@@ -1,9 +1,11 @@
 # bash completion for ImageMagick
 
-have convert || return
-
+have convert && {
 _ImageMagick()
 {
+    local cur prev
+    _get_comp_words_by_ref cur prev
+
     case $prev in
         -channel)
             COMPREPLY=( $( compgen -W 'Red Green Blue Opacity \
@@ -130,8 +132,10 @@ _ImageMagick()
 
 _convert()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
 
     _ImageMagick
 
@@ -184,13 +188,15 @@ _convert()
     else
         _filedir
     fi
-} &&
+}
 complete -F _convert convert
 
 _mogrify()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
 
     _ImageMagick
 
@@ -238,13 +244,15 @@ _mogrify()
     else
         _filedir
     fi
-} &&
+}
 complete -F _mogrify mogrify
 
 _display()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
 
     _ImageMagick
 
@@ -276,13 +284,15 @@ _display()
     else
         _filedir
     fi
-} &&
+}
 complete -F _display display
 
 _animate()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
 
     _ImageMagick
 
@@ -308,13 +318,15 @@ _animate()
     else
         _filedir
     fi
-} &&
+}
 complete -F _animate animate
 
 _identify()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
 
     _ImageMagick
 
@@ -331,13 +343,15 @@ _identify()
     else
         _filedir
     fi
-} &&
+}
 complete -F _identify identify
 
 _montage()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
 
     _ImageMagick
 
@@ -367,13 +381,15 @@ _montage()
     else
         _filedir
     fi
-} &&
+}
 complete -F _montage montage
 
 _composite()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
 
     _ImageMagick
 
@@ -400,13 +416,15 @@ _composite()
     else
         _filedir
     fi
-} &&
+}
 complete -F _composite composite
 
 _compare()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
 
     _ImageMagick
 
@@ -425,13 +443,15 @@ _compare()
     else
         _filedir
     fi
-} &&
+}
 complete -F _compare compare
 
 _conjure()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
 
     _ImageMagick
 
@@ -443,13 +463,15 @@ _conjure()
     else
         _filedir
     fi
-} &&
+}
 complete -F _conjure conjure
 
 _import()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
 
     _ImageMagick
 
@@ -472,13 +494,15 @@ _import()
     else
         _filedir
     fi
-} &&
+}
 complete -F _import import
 
 _stream()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
 
     _ImageMagick
 
@@ -495,8 +519,9 @@ _stream()
     else
         _filedir
     fi
-} &&
+}
 complete -F _stream stream
+}
 
 # Local variables:
 # mode: shell-script

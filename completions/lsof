@@ -1,11 +1,11 @@
 # lsof(8) completion
 
-have lsof || return
-
+have lsof &&
 _lsof()
 {
-    local cur prev words cword
-    _init_completion || return
+    COMPREPLY=()
+    local cur prev
+    _get_comp_words_by_ref cur prev
 
     case $prev in
         -'?'|-h|+c|-c|-d|-F|-i|+r|-r|-s|-S|-T)

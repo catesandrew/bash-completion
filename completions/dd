@@ -1,11 +1,12 @@
 # bash completion for dd
 
-have dd || return
-
+have dd &&
 _dd()
 {
-    local cur prev words cword
-    _init_completion -n = || return
+    local cur
+
+    COMPREPLY=()
+    _get_comp_words_by_ref -n = cur
 
     case $cur in
         if=*|of=*)

@@ -1,11 +1,11 @@
 # bash completion for fuse
 
-have fusermount || return
-
+have fusermount &&
 _fusermount()
 {
-    local cur prev words cword
-    _init_completion || return
+    COMPREPLY=()
+    local cur prev
+    _get_comp_words_by_ref cur prev
 
     case $prev in
         -h|-V|-o)

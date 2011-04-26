@@ -1,13 +1,12 @@
 # mtx completion by Jon Middleton <jjm@ixtab.org.uk>
 
-have mtx || return
-
+have mtx &&
 _mtx()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev options tapes drives
 
-    local options tapes drives
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
 
     options="-f nobarcode invert noattach --version inquiry noattach \
         inventory status load unload eepos first last next"
@@ -21,7 +20,7 @@ _mtx()
     drives=${drives//:Full}
     drives=${drives//:Empty}
 
-    if [ $cword -gt 1 ]; then
+    if [ $COMP_CWORD -gt 1 ]; then
         case $prev in
             load)
                 COMPREPLY=( $( compgen -W "$tapes" -- "$cur" ) )

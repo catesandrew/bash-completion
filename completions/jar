@@ -1,18 +1,19 @@
 # jar(1) completion
 
-have jar || return
-
+have jar &&
 _jar()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
 
-    if [[ $cword -eq 1 ]]; then
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
+
+    if [ $COMP_CWORD = 1 ]; then
         COMPREPLY=( $( compgen -W 'c t x u' -- "$cur" ) )
         return 0
     fi
 
-    case ${words[1]} in
+    case ${COMP_WORDS[1]} in
         *c*f)
             _filedir
             ;;

@@ -1,11 +1,12 @@
 # snownews(1) completion
 
-have snownews || return
-
+have snownews &&
 _snownews()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
 
     if [[ "$cur" == -* ]]; then
         # return list of available options

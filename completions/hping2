@@ -1,11 +1,13 @@
 # bash completion for hping2
 
-have hping || have hping2 || have hping3 || return
-
+have hping || have hping2 || have hping3 &&
 _hping2()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev
+
+    COMPREPLY=()
+    cur=`_get_cword`
+    prev=`_get_pword`
 
     case $prev in
         -I|--interface)

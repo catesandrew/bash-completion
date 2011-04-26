@@ -1,11 +1,13 @@
 # bash completion for bzip2
 
-have bzip2 || have pbzip2 || return
-
+have bzip2 || have pbzip2 &&
 _bzip2()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev xspec helpopts
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
+    helpopts=`_parse_help ${COMP_WORDS[0]}`
 
     case $prev in
         -b|-h|--help|-p)
@@ -14,14 +16,14 @@ _bzip2()
     esac
 
     if [[ "$cur" == -* ]]; then
-        local helpopts=`_parse_help ${words[0]}`
         COMPREPLY=( $( compgen -W "${helpopts//#/} -2 -3 -4 -5 -6 -7 -8 -9" \
             -- "$cur" ) )
         return 0
     fi
 
-    local IFS=$'\n' xspec="*.bz2"
+    local IFS=$'\n'
 
+    xspec="*.bz2"
     if [[ "$prev" == --* ]]; then
         [[ "$prev" == --decompress || \
             "$prev" == --list || \
@@ -34,7 +36,7 @@ _bzip2()
 
     _expand || return 0
 
-    compopt -o filenames
+    _compopt_o_filenames
     COMPREPLY=( $( compgen -f -X "$xspec" -- "$cur" ) \
         $( compgen -d -- "$cur" ) )
 } &&

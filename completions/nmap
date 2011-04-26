@@ -1,11 +1,13 @@
 # bash completion for nmap
 
-have nmap || return
-
+have nmap &&
 _nmap()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev
+
+    COMPREPLY=()
+    cur=`_get_cword`
+    prev=`_get_pword`
 
     case $prev in
         -iL|-oN|-oX|-oS|-oG|---excludefile|--resume|--stylesheet)

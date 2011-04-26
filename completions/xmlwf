@@ -1,11 +1,12 @@
 # bash completion for xmlwf(1)
 
-have xmlwf || return
-
+have xmlwf &&
 _xmlwf()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
 
     case $prev in
         -d)

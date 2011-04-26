@@ -1,11 +1,12 @@
 # PINE address-book completion
 
-have pine || have alpine || return
-
+have pine || have alpine &&
 _pineaddr()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
 
     COMPREPLY=( $( compgen -W '$( awk "{print \$1}" ~/.addressbook \
         2>/dev/null)' -- "$cur" ) )

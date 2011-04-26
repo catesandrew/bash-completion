@@ -1,11 +1,12 @@
 # bash completion for sysctl
 
-have sysctl || return
-
+have sysctl &&
 _sysctl()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
 
     COMPREPLY=( $( compgen -W \
         "$( PATH="$PATH:/sbin" sysctl -N -a 2>/dev/null )" -- "$cur" ) )

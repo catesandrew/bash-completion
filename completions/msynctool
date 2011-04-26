@@ -1,13 +1,14 @@
 # bash completion for msynctool
 
-have msynctool || return
-
+have msynctool &&
 _msynctool()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev anteprev
 
-    case $words in
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev anteprev
+
+    case $anteprev in
         --configure)
             COMPREPLY=( $( compgen -W "$(msynctool --showgroup \
                 $prev | awk '/^Member/ {print $2}' | sed \

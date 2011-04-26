@@ -1,11 +1,10 @@
 # bash completion for rrdtool
 
-have rrdtool || return
-
+have rrdtool &&
 _rrdtool ()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
+    _get_comp_words_by_ref cur
 
     COMPREPLY=( $( compgen -W 'create update updatev graph dump restore last \
         lastupdate first info fetch tune resize xport' -- "$cur" ) )

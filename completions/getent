@@ -1,11 +1,12 @@
 # bash completion for getent
 
-have getent || return
-
+have getent &&
 _getent()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
 
     case $prev in
         passwd)
@@ -37,7 +38,7 @@ _getent()
     esac
 
 
-    if [ $cword -eq 1 ]; then
+    if [ $COMP_CWORD -eq 1 ]; then
         COMPREPLY=( $( compgen -W 'passwd group hosts services protocols \
             networks ahosts ahostsv4 ahostsv6 aliases ethers netgroup rpc \
             shadow' -- "$cur" ) )

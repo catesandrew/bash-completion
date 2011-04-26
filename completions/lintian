@@ -3,10 +3,8 @@
 #
 # bash completion for lintian(1) and lintian-info(1)
 
-have lintian || return
-
-_lintian_tags()
-{
+have lintian && {
+_lintian_tags() {
     local match search tags
 
     tags=$( grep -e ^Tag /usr/share/lintian/checks/*.desc | cut -d\  -f2 )
@@ -17,17 +15,17 @@ _lintian_tags()
                     | cut -d: -f1 )
             tags=$( echo $tags | sed -e "s/\<$item\>//g" )
         done
-        COMPREPLY+=( $(compgen -W "$tags") )
+        COMPREPLY=( ${COMPREPLY[@]} $(compgen -W "$tags") )
     elif [[ "$cur" == *,* ]]; then
-        COMPREPLY+=( $(compgen -P "${cur%,*}," -W "$tags" -- "${cur##*,}") )
+        COMPREPLY=( ${COMPREPLY[@]} $(compgen -P "${cur%,*}," -W "$tags" -- \
+                                      "${cur##*,}") )
     else
-        COMPREPLY+=( $(compgen -W "$tags" -- "$cur") )
+        COMPREPLY=( ${COMPREPLY[@]} $(compgen -W "$tags" -- "$cur") )
     fi
     return 0
 }
 
-_lintian_checks()
-{
+_lintian_checks() {
     local match search todisable checks
 
     checks=$(grep -e ^Check-Script -e ^Abbrev \
@@ -43,17 +41,17 @@ _lintian_checks()
                 checks=$( echo $checks | sed -e "s/\<$name\>//g" )
             done
         done
-        COMPREPLY+=( $(compgen -W "$checks") )
+        COMPREPLY=( ${COMPREPLY[@]} $(compgen -W "$checks") )
     elif [[ "$cur" == *,* ]]; then
-        COMPREPLY+=( $(compgen -P "${cur%,*}," -W "$checks" -- "${cur##*,}") )
+        COMPREPLY=( ${COMPREPLY[@]} $(compgen -P "${cur%,*}," -W "$checks" \
+                                      -- "${cur##*,}") )
     else
-        COMPREPLY+=( $(compgen -W "$checks" -- "$cur") )
+        COMPREPLY=( ${COMPREPLY[@]} $(compgen -W "$checks" -- "$cur") )
     fi
     return 0
 }
 
-_lintian_infos()
-{
+_lintian_infos() {
     local match search infos
 
     infos=$(grep -e ^Collector /usr/share/lintian/collection/*.desc \
@@ -65,34 +63,32 @@ _lintian_infos()
                     /usr/share/lintian/collection/*.desc | cut -d: -f1 )
             infos=$( echo $infos | sed -e "s/\<$item\>//g" )
         done
-        COMPREPLY+=( $(compgen -W "$infos") )
+        COMPREPLY=( ${COMPREPLY[@]} $(compgen -W "$infos") )
     elif [[ "$cur" == *,* ]]; then
-        COMPREPLY+=( $(compgen -P "${cur%,*}," -W "$infos" -- "${cur##*,}") )
+        COMPREPLY=( ${COMPREPLY[@]} $(compgen -P "${cur%,*}," -W "$infos" \
+                                      -- "${cur##*,}") )
     else
-        COMPREPLY+=( $(compgen -W "$infos" -- "$cur") )
+        COMPREPLY=( ${COMPREPLY[@]} $(compgen -W "$infos" -- "$cur") )
     fi
     return 0
 }
 
-_lintian_arches()
-{
+_lintian_arches() {
     return 0
 }
 
-_lintian()
-{
-    local cur prev words cword
-    _init_completion || return
-
-    local action lint_actions general_opts behaviour_opts \
+_lintian() {
+    local cur prev action lint_actions general_opts behaviour_opts \
           configuration_opts selection_opts
+
+    _get_comp_words_by_ref cur prev
 
     lint_actions="--setup-lab --remove-lab --check --check-part --tags \
                   --tags-from-file --ftp-master-rejects --dont-check-part \
                   --unpack --remove"
     general_opts="--help --version --print-version --verbose --debug --quiet"
     behaviour_opts="--info --display-info --display-experimental --pedantic \
-                    --display-level --suppress-tags \
+                    --display-level --suppress-tags --unpack-level \
                     --suppress-tags-from-file --no-override --show-overrides \
                     --color --unpack-info --md5sums --checksums --allow-root \
                     --fail-on-warnings --keep-lab"
@@ -114,6 +110,10 @@ _lintian()
                 ;;
             --lab|--archivedir|--dist|--root)
                 _filedir -d
+                ;;
+            -l|--unpack-level)
+                COMPREPLY=($(compgen -W "0 none 1 basic 2 contents" -- \
+                             "$cur"))
                 ;;
             --color)
                 COMPREPLY=($(compgen -W "never always auto html" -- "$cur"))
@@ -156,13 +156,12 @@ _lintian()
             ;;
     esac
     return 0
-} &&
-complete -F _lintian lintian
+}
 
-_lintian_info()
-{
-    local cur prev words cword
-    _init_completion || return
+_lintian_info() {
+    local cur prev
+
+    _get_comp_words_by_ref cur prev
 
     case "$prev" in
         -t|--tags)
@@ -180,13 +179,8 @@ _lintian_info()
             ;;
     esac
     return 0
-} &&
-complete -F _lintian_info lintian-info
+}
 
-# Local variables:
-# mode: shell-script
-# sh-basic-offset: 4
-# sh-indent-comment: t
-# indent-tabs-mode: nil
-# End:
-# ex: ts=4 sw=4 et filetype=sh
+complete -F _lintian lintian
+complete -F _lintian_info lintian-info
+}

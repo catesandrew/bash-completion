@@ -1,7 +1,6 @@
 # bash completion for cpio
 
-have cpio || return
-
+have cpio && {
 _cpio_format()
 {
     COMPREPLY=( $( compgen -W 'bin odc newc crc tar ustar hpbin hpodc' -- "$cur" ) )
@@ -9,10 +8,11 @@ _cpio_format()
 
 _cpio()
 {
-    local cur prev words cword
-    _init_completion -n : || return
+    local cur prev split=false
 
-    local split=false
+    COMPREPLY=()
+    _get_comp_words_by_ref -n : cur prev
+
     _split_longopt && split=true
 
     # --name value style option
@@ -30,7 +30,7 @@ _cpio()
             return 0
             ;;
         --rsh-command)
-            compopt -o filenames
+            _compopt_o_filenames
             COMPREPLY=( $( compgen -c -- "$cur" ) )
             return 0
             ;;
@@ -38,11 +38,11 @@ _cpio()
 
     $split && return 0
 
-    if [ $cword -eq 1 ]; then
+    if [ $COMP_CWORD -eq 1 ]; then
         COMPREPLY=( $( compgen -W '-o --create -i --extract -p --pass-through \
                                    -? --help --license --usage --version' -- "$cur" ) )
     else
-        case ${words[1]} in
+        case ${COMP_WORDS[1]} in
             -o|--create)
                 if [[ "$cur" == -* ]]; then
                     COMPREPLY=( $( compgen -W '-0 -a -c -v -A -B\
@@ -90,8 +90,9 @@ _cpio()
                 ;;
         esac
     fi
-} &&
+}
 complete -F _cpio cpio
+}
 
 # Local variables:
 # mode: shell-script

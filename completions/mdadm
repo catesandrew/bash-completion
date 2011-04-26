@@ -1,13 +1,13 @@
 # bash completion for mdadm
 
-have mdadm || return
-
+have mdadm &&
+{
 _mdadm_raid_level()
 {
     local mode
 
-    for (( i=1; i < cword; i++ )); do
-        case ${words[i]} in
+    for (( i=1; i < COMP_CWORD; i++ )); do
+        case ${COMP_WORDS[i]} in
             -C|--create)
                 mode=create
                 break
@@ -35,9 +35,9 @@ _mdadm_raid_level()
 _mdadm_raid_layout()
 {
     local level
-    for (( i=1; i < cword; i++ )); do
-        if [[ "${words[i]}" == -@(l|-level) ]]; then
-            level=${words[i+1]}
+    for (( i=1; i < COMP_CWORD; i++ )); do
+        if [[ "${COMP_WORDS[i]}" == -@(l|-level) ]]; then
+            level=${COMP_WORDS[i+1]}
             break
         fi
     done
@@ -72,10 +72,11 @@ _mdadm_update_flag()
 
 _mdadm()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev mode options split=false
 
-    local split=false
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
+
     _split_longopt && split=true
 
     case $prev in
@@ -103,16 +104,15 @@ _mdadm()
 
     $split && return 0
 
-    local options
     options='--help --help-options --version --verbose --quiet \
         --brief --force --config --scan --metadata --homehost'
 
     if [[ "$cur" == -* ]]; then
-        if [[ $cword -eq 1 ]] ; then
+        if [[ $COMP_CWORD -eq 1 ]] ; then
             COMPREPLY=( $( compgen -W "$options --assemble --build \
                 --create --monitor --grow" -- "$cur" ) )
         else
-            case ${words[cword-1]} in
+            case ${COMP_WORDS[COMP_CWORD-1]} in
                 -A|--assemble)
                     COMPREPLY=( $( compgen -W "$options --uuid \
                         --super-minor --name --force --run \
@@ -149,8 +149,9 @@ _mdadm()
         cur=${cur:=/dev/}
         _filedir
     fi
-} &&
+}
 complete -F _mdadm mdadm
+}
 
 # Local variables:
 # mode: shell-script

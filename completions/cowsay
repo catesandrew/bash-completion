@@ -1,11 +1,12 @@
 # bash completion for cowsay
 
-have cowsay || return
-
+have cowsay &&
 _cowsay()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
 
     case $prev in
         -f)

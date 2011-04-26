@@ -1,11 +1,12 @@
 # bash completion for Slackware Linux pkgtools
 
-[ -f /etc/slackware-version ] && have removepkg || return
-
+have removepkg && [ -f /etc/slackware-version ] &&
 _removepkg()
 {
-    local cur prev words cword
-    _init_completion || return
+    local packages cur
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
 
     COMPREPLY=( $( (cd /var/log/packages; compgen -f -- "$cur") ) )
 } &&

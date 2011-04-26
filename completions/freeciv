@@ -3,8 +3,10 @@
 have civserver &&
 _civserver()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
 
     case $prev in
         -f|-g|-l|-r|--file|--log|--gamelog|--read)
@@ -25,8 +27,10 @@ complete -F _civserver civserver
 have civclient &&
 _civclient()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
 
     case $prev in
         -l|-S|-t|--log|--Sound|--tiles)

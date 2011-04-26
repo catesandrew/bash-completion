@@ -1,13 +1,13 @@
 # BitKeeper completion adapted from code by  Bart Trojanowski <bart@jukie.net>
 
-have bk || return
+have bk &&
+_bk() {
+    local BKCMDS
 
-_bk()
-{
-    local cur prev words cword
-    _init_completion || return
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
 
-    local BKCMDS="$( bk help topics | awk '/^  bk/ { print $4 }' | \
+    BKCMDS="$( bk help topics | awk '/^  bk/ { print $4 }' | \
         xargs printf '%s ' )"
 
     COMPREPLY=( $( compgen -W "$BKCMDS" -- "$cur" ) )

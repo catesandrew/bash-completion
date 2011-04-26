@@ -1,13 +1,12 @@
 # bash completion for rtcwake
 
-have rtcwake || return
-
+have rtcwake &&
 _rtcwake()
 {
-    local cur prev words cword
-    _init_completion || return
+    COMPREPLY=()
+    local cur prev split=false
+    _get_comp_words_by_ref cur prev
 
-    local split=false
     _split_longopt && split=true
 
     case "$prev" in

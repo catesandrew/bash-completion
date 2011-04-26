@@ -1,19 +1,18 @@
 # wtf completion
 # Raphael Droz, 25/09/2009
 
-have wtf || return
-
+have wtf &&
 _wtf()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev db
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
 
     [ "$prev" = -f ] && _filedir && return 0
     [[ "$cur" == -* ]] && COMPREPLY=( -f ) && return 0
 
-    local db
-
-    set -- "${words[@]}"
+    set -- "${COMP_WORDS[@]}"
     while [ $# -gt 0 ]; do
         if [ "$1" = -f ]; then
             shift ; db=$1 ; break
@@ -22,7 +21,9 @@ _wtf()
     done
     [ -z $db ] && db=${ACRONYMDB:-/usr/share/misc/acronyms*}
 
-    COMPREPLY=( $( compgen -W "$( cut -f 1 -s $db ) -f" -- "${cur^^}" ) )
+    [ ${BASH_VERSINFO[0]} -ge 4 ] && cur="${cur^^}"
+
+    COMPREPLY=( $( compgen -W "$( cut -f 1 -s $db ) -f" -- "${cur}" ) )
 } &&
 complete -F _wtf wtf
 

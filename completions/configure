@@ -1,13 +1,12 @@
 # bash completion for configure
 
-# No "have configure" here on purpose, it's rarely in any $PATH
-
 _configure()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev split=false
 
-    local split=false
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
+
     _split_longopt && split=true
 
     case $prev in
@@ -33,7 +32,7 @@ _configure()
             if ($2 ~ /--[A-Za-z]/) print $2 }' | sed -e 's/[[,=].*//g' )" \
             -- "$cur" ) )
     fi
-} &&
+}
 complete -F _configure configure
 
 # Local variables:

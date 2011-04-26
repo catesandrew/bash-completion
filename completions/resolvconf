@@ -1,11 +1,12 @@
 # bash completion for resolvconf
 
-have resolvconf || return
-
+have resolvconf &&
 _resolvconf()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur command
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
 
     case $prev in
         -a|-d)

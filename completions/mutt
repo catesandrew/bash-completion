@@ -3,7 +3,7 @@
 # Mutt doesn't have an "addressbook" like Pine, but it has aliases and
 # a "query" function to retrieve addresses, so that's what we use here.
 
-have mutt || have muttng || return
+have mutt || have muttng && {
 
 # @param $1 (cur) Current word to complete
 _muttaddr()
@@ -11,10 +11,10 @@ _muttaddr()
     _muttaliases "$1"
     _muttquery "$1"
 
-    COMPREPLY+=( $( compgen -u -- "$1" ) )
+    COMPREPLY=( "${COMPREPLY[@]}" $( compgen -u -- "$1" ) )
 
     return 0
-}
+} # _muttaddr()
 
 
 # Find muttrc to use
@@ -22,7 +22,7 @@ _muttaddr()
 _muttrc()
 {
     # Search COMP_WORDS for '-F muttrc' or '-Fmuttrc' argument
-    set -- "${words[@]}"
+    set -- "${COMP_WORDS[@]}"
     while [ $# -gt 0 ]; do
         if [ "${1:0:2}" = -F ]; then
             if [ ${#1} -gt 2 ]; then
@@ -44,7 +44,7 @@ _muttrc()
         fi
     fi
     printf "%s" "$muttrc"
-}
+} # _muttrc()
 
 
 # Recursively build list of sourced config files
@@ -61,22 +61,21 @@ _muttconffiles()
     while [[ "$1" ]]; do
         newconffiles=( $(sed -n 's|^source[[:space:]]\{1,\}\([^[:space:]]\{1,\}\).*$|\1|p' $(eval echo $1) ) )
         for file in "${newconffiles[@]}"; do
-            __expand_tilde_by_ref file
             [[ ! -f "$file" || "${sofar/ ${file} / }" != "$sofar" ]] &&
                 continue
-            sofar+=" $file"
+            sofar="$sofar $file"
             sofar=" $(eval _muttconffiles \"$sofar\" $file) "
         done
         shift
     done
     printf '%s\n' $sofar
-}
+} # _muttconffiles()
 
 
 # @param $1 (cur) Current word to complete
 _muttaliases()
 {
-    local cur=$1 muttrc muttcmd=${words[0]}
+    local cur=$1 muttrc muttcmd=${COMP_WORDS[0]}
     local -a conffiles aliases
 
     muttrc=$(_muttrc)
@@ -85,7 +84,7 @@ _muttaliases()
     conffiles=( $(eval _muttconffiles $muttrc $muttrc) )
     aliases=( $( sed -n 's|^alias[[:space:]]\{1,\}\([^[:space:]]\{1,\}\).*$|\1|p' \
         $(eval echo "${conffiles[@]}") ) )
-    COMPREPLY+=( $( compgen -W "${aliases[*]}" -- "$cur" ) )
+    COMPREPLY=( "${COMPREPLY[@]}" $( compgen -W "${aliases[*]}" -- "$cur" ) )
 
     return 0
 }
@@ -94,7 +93,7 @@ _muttaliases()
 # @param $1 (cur) Current word to complete
 _muttquery()
 {
-    local cur=$1 querycmd muttcmd=${words[0]}
+    local cur=$1 querycmd muttcmd=${COMP_WORDS[0]}
     local -a queryresults
 
     querycmd="$( $muttcmd -Q query_command | sed -e 's|^query_command=\"\(.*\)\"$|\1|' -e 's|%s|'$cur'|' )"
@@ -105,7 +104,8 @@ _muttquery()
             sed -n '2,$s|^\([^[:space:]]\{1,\}\).*|\1|p' ) )
     fi
 
-    COMPREPLY+=( $( compgen -W "${queryresults[*]}" -- "$cur" ) )
+    COMPREPLY=( "${COMPREPLY[@]}" $( compgen -W "${queryresults[*]}" \
+        -- "$cur" ) )
 
     return 0
 }
@@ -114,7 +114,7 @@ _muttquery()
 # @param $1 (cur) Current word to complete
 _muttfiledir()
 {
-    local cur=$1 folder muttrc spoolfile muttcmd=${words[0]}
+    local cur=$1 folder muttrc spoolfile muttcmd=${COMP_WORDS[0]}
 
     muttrc=$(_muttrc)
     if [[ $cur == [=+]* ]]; then
@@ -123,7 +123,7 @@ _muttfiledir()
 
         # Match any file in $folder beginning with $cur
         # (minus the leading '=' sign).
-        compopt -o filenames
+        _compopt_o_filenames
         COMPREPLY=( $( compgen -f -- "$folder/${cur:1}" ) )
         COMPREPLY=( ${COMPREPLY[@]#$folder/} )
         return 0
@@ -135,13 +135,17 @@ _muttfiledir()
     _filedir
 
     return 0
-}
+} # _muttfiledir
 
 
 _mutt()
 {
-    local cur prev words cword
-    _init_completion -n =+! || return
+    local cur prev
+    _get_comp_words_by_ref -n =+! cur prev
+    #cur=`_get_cword =+!`
+    #prev=`_get_pword =+!`
+
+    COMPREPLY=()
 
     case $cur in
     -*)
@@ -169,8 +173,9 @@ _mutt()
         esac
         ;;
     esac
-} &&
+} # _mutt()
 complete -F _mutt -o default mutt muttng
+} # have mutt
 
 # Local variables:
 # mode: shell-script

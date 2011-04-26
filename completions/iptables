@@ -1,19 +1,19 @@
 # bash completion for iptables
 
-have iptables || return
-
+have iptables &&
 _iptables()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev table chain
 
-    local table chain='s/^Chain \([^ ]\{1,\}\).*$/\1/p'
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
+    chain='s/^Chain \([^ ]\{1,\}\).*$/\1/p'
 
-    if [[ ${words[@]} == *-t\ *filter* ]]; then
+    if [[ $COMP_LINE == *-t\ *filter* ]]; then
         table="-t filter"
-    elif [[ ${words[@]} == *-t\ *nat* ]]; then
+    elif [[ $COMP_LINE == *-t\ *nat* ]]; then
         table="-t nat"
-    elif [[ ${words[@]} == *-t\ *mangle* ]]; then
+    elif [[ $COMP_LINE == *-t\ *mangle* ]]; then
         table="-t mangle"
     fi
 

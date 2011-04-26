@@ -1,11 +1,12 @@
 # gkrellm(1) completion
 
-have gkrellm || have gkrellm2 || return
-
+have gkrellm || have gkrellm2 &&
 _gkrellm()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
 
     case $prev in
         -t|--theme)

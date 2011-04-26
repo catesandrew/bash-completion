@@ -5,14 +5,16 @@
 have renice &&
 _renice()
 {
-    local cur prev words cword
-    _init_completion || return
+    local command cur curopt i
 
-    local command=$1 curopt i=0
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
+    command=$1
 
+    i=0
     # walk back through command line and find last option
-    while [[ $i -le $cword && ${#COMPREPLY[@]} -eq 0 ]]; do
-        curopt=${words[cword-$i]}
+    while [[ $i -le $COMP_CWORD && ${#COMPREPLY[@]} -eq 0 ]]; do
+        curopt=${COMP_WORDS[COMP_CWORD-$i]}
         case "$curopt" in
             -u)
                 _allowed_users
@@ -34,10 +36,12 @@ complete -F _renice renice
 have kill &&
 _kill()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
 
-    if [[ $cword -eq 1 && "$cur" == -* ]]; then
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
+
+    if [[ $COMP_CWORD -eq 1 && "$cur" == -* ]]; then
         # return list of available signals
         _signals
     else
@@ -52,10 +56,12 @@ complete -F _kill kill
 have look &&
 _look()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
 
-    if [[ $cword -eq 1 ]]; then
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
+
+    if [ $COMP_CWORD = 1 ]; then
         COMPREPLY=( $( compgen -W '$(look "$cur" 2>/dev/null)' -- "$cur" ) )
     fi
 } &&

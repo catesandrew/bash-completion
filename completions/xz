@@ -1,18 +1,19 @@
 # xz(1) completion
 
-have xz || have pxz &&
+have xz &&
 _xz()
 {
-    local cur prev words cword
-    _init_completion || return
+    COMPREPLY=()
+    local cur prev
+    _get_comp_words_by_ref cur prev
 
     if [[ "$cur" == -* ]]; then
         COMPREPLY=( $( compgen -W '--compress --decompress --test --list \
-            --keep --force --stdout --no-sparse --suffix --files --files0 \
-            --format --check -0 -1 -2 -3 -4 -5 -6 -7 -8 -9 --extreme --memory \
+            --keep --force --stdout --suffix --files --files0 --format --check \
+            -0 -1 -2 -3 -4 -5 -6 -7 -8 -9 --fast --best --extreme --memory \
             --lzma1 --lzma2 --x86 --powerpc --ia64 --arm --armthumb --sparc \
-            --delta --quiet --verbose --no-warn --robot --info-memory --help \
-            --long-help --version' -- "$cur" ) )
+            --delta --quiet --verbose --no-warn --help --long-help --version' \
+            -- "$cur" ) )
         return 0
     fi
 
@@ -30,7 +31,7 @@ _xz()
             return 0
             ;;
         -C|--check)
-            COMPREPLY=( $( compgen -W 'crc32 crc64 sha256 none' -- "$cur" ) )
+            COMPREPLY=( $( compgen -W 'crc32 crc64 sha256' -- "$cur" ) )
             return 0
             ;;
         -F|--format)
@@ -41,7 +42,7 @@ _xz()
             # argument required but no completions available
             return 0
             ;;
-        -h|--help|-H|--long-help|-V|--version|--info-memory)
+        -h|--help|-H|--long-help|-V|--version)
             # all other arguments are noop with these
             return 0
             ;;
@@ -52,23 +53,23 @@ _xz()
     _expand || return 0
 
     local IFS=$'\n'
-    compopt -o filenames
+    _compopt_o_filenames
     COMPREPLY=( $( compgen -f -X "$xspec" -- "$cur" ) \
         $( compgen -d -- "$cur" ) )
 } &&
-complete -F _xz xz pxz
+complete -F _xz xz
 
 # xzdec(1) completion
 #
 have xzdec &&
 _xzdec()
 {
-    local cur prev words cword
-    _init_completion || return
+    COMPREPLY=()
+    local cur prev
+    _get_comp_words_by_ref cur prev
 
     if [[ "$cur" == -* ]]; then
-        COMPREPLY=( $( compgen -W '--memory --quiet --help --version' \
-            -- "$cur" ) )
+        COMPREPLY=( $( compgen -W '--memory --help --version' -- "$cur" ) )
         return 0
     fi
 

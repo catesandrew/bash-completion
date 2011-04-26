@@ -1,3 +1,3 @@
-helpers_DATA = perl
+helpers_SCRIPTS = perl
 
-EXTRA_DIST = $(helpers_DATA)
+EXTRA_DIST = $(helpers_SCRIPTS)

@@ -1,14 +1,13 @@
 # bash completion for quota-tools
 
-have quota || return
-
+have quota && {
 _user_or_group()
 {
     local i
 
     # complete on groups if -g was given
-    for (( i=1; i < cword; i++ )); do
-        if [[ "${words[i]}" == -g ]]; then
+    for (( i=1; i < COMP_CWORD; i++ )); do
+        if [[ "${COMP_WORDS[i]}" == -g ]]; then
             COMPREPLY=( $( compgen -g -- "$cur" ) )
             return 0
         fi
@@ -33,10 +32,11 @@ _filesystems()
 
 _quota()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev split=false
 
-    local split=false
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
+
     _split_longopt && split=true
 
     case $prev in
@@ -56,15 +56,16 @@ _quota()
     else
         _user_or_group
     fi
-} &&
+}
 complete -F _quota -o default quota
 
 _setquota()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev split=false
 
-    local split=false
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
+
     _split_longopt && split=true
 
     case $prev in
@@ -94,15 +95,16 @@ _setquota()
         esac
 
     fi
-} &&
+}
 complete -F _setquota -o default setquota
 
 _edquota()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev split=false
 
-    local split=false
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
+
     _split_longopt && split=true
 
     case $prev in
@@ -125,15 +127,16 @@ _edquota()
     else
         _user_or_group
     fi
-} &&
+}
 complete -F _edquota -o default edquota
 
 _quotacheck()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev split=false
 
-    local split=false
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
+
     _split_longopt && split=true
 
     case $prev in
@@ -153,15 +156,16 @@ _quotacheck()
     else
         _filesystems
     fi
-} &&
+}
 complete -F _quotacheck -o default quotacheck
 
 _repquota()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev split=false
 
-    local split=false
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
+
     _split_longopt && split=true
 
     case $prev in
@@ -181,15 +185,16 @@ _repquota()
     else
         _filesystems
     fi
-} &&
+}
 complete -F _repquota -o default repquota
 
 _quotaon()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev split=false
 
-    local split=false
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
+
     _split_longopt && split=true
 
     case $prev in
@@ -207,15 +212,16 @@ _quotaon()
     else
         _filesystems
     fi
-} &&
+}
 complete -F _quotaon -o default quotaon
 
 _quotaoff()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev split=false
 
-    local split=false
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
+
     _split_longopt && split=true
 
     case $prev in
@@ -238,8 +244,9 @@ _quotaoff()
     else
         _filesystems
     fi
-} &&
+}
 complete -F _quotaoff -o default quotaoff
+}
 
 # Local variables:
 # mode: shell-script

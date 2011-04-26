@@ -1,13 +1,11 @@
 # wol(1) completion
 
-have wol || return
-
+have wol &&
 _wol()
 {
-    local cur prev words cword
-    _init_completion -n : || return
-
-    local split=false
+    local cur prev split=false
+    COMPREPLY=()
+    _get_comp_words_by_ref -n : cur prev
     _split_longopt && split=true
 
     case $prev in

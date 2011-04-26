@@ -1,11 +1,11 @@
 # POSIX sh(1) completion
 
-have sh || return
-
+have sh &&
 _sh()
 {
-    local cur prev words cword
-    _init_completion || return
+    COMPREPLY=()
+    local cur prev
+    _get_comp_words_by_ref cur prev
 
     case $prev in
         -c)

@@ -1,11 +1,12 @@
 # bash completion for mkisofs/genisoimage
 
-have mkisofs || have genisoimage || return
-
+(have mkisofs || have genisoimage) &&
 _mkisofs()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
 
     case $prev in
         -o|-abstract|-biblio|-check-session|-copyright|-log-file| \

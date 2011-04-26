@@ -1,11 +1,13 @@
-have ipv6calc || return
-
+have ipv6calc &&
 _ipv6calc()
 {
-    local cur prev words cword
-    _init_completion -n = || return
+    local cur prev split=false
 
-    local split=false
+    COMPREPLY=()
+    _get_comp_words_by_ref -n = cur prev
+    #cur=`_get_cword =`
+    #prev=`_get_pword`
+
     _split_longopt && split=true
 
     case "$prev" in

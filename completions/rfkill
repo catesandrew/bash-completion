@@ -1,16 +1,17 @@
 # bash completion for rfkill
 
-have rfkill || return
-
+have rfkill &&
 _rfkill()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
 
     if [[ "$cur" == -* ]]; then
         COMPREPLY=( $( compgen -W '--version' -- "$cur" ) )
     else
-        case $cword in
+        case $COMP_CWORD in
             1)
                 COMPREPLY=( $( compgen -W "help event list block unblock" \
                     -- "$cur" ) )

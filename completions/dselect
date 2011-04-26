@@ -1,11 +1,12 @@
 # Debian Linux dselect(8) completion.
 
-have dselect || return
-
+have dselect &&
 _dselect()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
 
     case $prev in
         --admindir)

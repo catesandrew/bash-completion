@@ -1,13 +1,12 @@
 # sshfs(1) completion
 
-have sshfs || return
-
+have sshfs &&
 _sshfs()
 {
-    local cur prev words cword
-    _init_completion -n : || return
+    local cur userhost path
 
-    local userhost path
+    COMPREPLY=()
+    _get_comp_words_by_ref -n : cur
 
     _expand || return 0
 

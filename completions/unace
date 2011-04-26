@@ -1,16 +1,17 @@
 # unace(1) completion
 
-have unace || return
-
+have unace &&
 _unace()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
 
     if [[ "$cur" == -* ]] ; then
         COMPREPLY=( $( compgen -W '-c -c- -f -f- -o -o- -p -y -y-' -- "$cur" ) )
     else
-        if [ $cword -eq 1 ]; then
+        if [ $COMP_CWORD -eq 1 ]; then
             COMPREPLY=( $( compgen -W 'e l t v x' -- "$cur" ) )
         else
             _filedir ace

@@ -1,36 +1,30 @@
 # bash completion for rsync
 
-have rsync || return
-
+have rsync &&
 _rsync()
 {
-    local cur prev words cword
-    _init_completion -n : || return
-
     # TODO: _split_longopt
+
+    COMPREPLY=()
+    local cur prev
+    _get_comp_words_by_ref -n : cur prev
 
     _expand || return 0
 
     case $prev in
-        --config|--password-file|--include-from|--exclude-from|--files-from|\
-        --log-file|--write-batch|--only-write-batch|--read-batch)
-            compopt +o nospace
+        --config|--password-file|--include-from|--exclude-from)
             _filedir
             return 0
             ;;
-        -T|--temp-dir|--compare-dest|--backup-dir|--partial-dir|--copy-dest|\
-        --link-dest)
-            compopt +o nospace
+        -T|--temp-dir|--compare-dest)
             _filedir -d
             return 0
             ;;
         -e|--rsh)
-            compopt +o nospace
             COMPREPLY=( $( compgen -W 'rsh ssh' -- "$cur" ) )
             return 0
             ;;
         --compress-level)
-            compopt +o nospace
             COMPREPLY=( $( compgen -W '1 2 3 4 5 6 7 8 9' -- "$cur" ) )
             return 0
             ;;
@@ -40,7 +34,7 @@ _rsync()
         -*)
             COMPREPLY=( $( compgen -W '--verbose --quiet --no-motd --checksum \
                 --archive --recursive --relative --no-implied-dirs \
-                --backup --backup-dir= --suffix= --update --inplace --append \
+                --backup --backup-dir --suffix= --update --inplace --append \
                 --append-verify --dirs --old-dirs --links --copy-links \
                 --copy-unsafe-links --safe-links --copy-dirlinks \
                 --keep-dirlinks --hard-links --perms --executability --chmod= \
@@ -65,16 +59,14 @@ _rsync()
                 --write-batch= --only-write-batch= --read-batch= --protocol= \
                 --iconv= --ipv4 --ipv6 --version --help --daemon --config= \
                 --no-detach' -- "$cur" ) )
-            [[ ${#COMPREPLY[@]} -eq 1 && ${COMPREPLY[0]} != *= ]] && \
-                compopt +o nospace
             ;;
         *:*)
             if type _scp_remote_files &>/dev/null; then
                 # find which remote shell is used
                 local i shell=ssh
-                for (( i=1; i < cword; i++ )); do
-                    if [[ "${words[i]}" == -@(e|-rsh) ]]; then
-                        shell=${words[i+1]}
+                for (( i=1; i < COMP_CWORD; i++ )); do
+                    if [[ "${COMP_WORDS[i]}" == -@(e|-rsh) ]]; then
+                        shell=${COMP_WORDS[i+1]}
                         break
                     fi
                 done

@@ -1,11 +1,11 @@
 # xsltproc(1) completion
 
-have xsltproc || return
-
+have xsltproc &&
 _xsltproc()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
 
     case $prev in
 	--output|-o)
@@ -36,7 +36,7 @@ _xsltproc()
             ;;
     esac
 
-    [[ $cword -gt 2 && `_get_cword '' 2` == --?(string)param ]] && \
+    [[ $COMP_CWORD -gt 2 && `_get_cword '' 2` == --?(string)param ]] && \
         return 0
 
     if [[ "$cur" == -* ]]; then

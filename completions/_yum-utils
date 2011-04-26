@@ -3,12 +3,13 @@
 
 # bash completion for repomanage
 
-have repomanage || return
-
+have repomanage &&
 _repomanage()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
 
     [[ "$prev" == -@(h|-help|k|-keep) ]] && return 0
 

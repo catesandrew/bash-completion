@@ -1,7 +1,6 @@
 # bash completion for Postgresql
 
-have psql || return
-
+have psql && {
 _pg_databases()
 {
     # -w was introduced in 8.4, https://launchpad.net/bugs/164772
@@ -22,10 +21,11 @@ _pg_users()
 #
 _createdb()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev split=false
 
-    local split=false
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
+
     _split_longopt && split=true
 
     case $prev in
@@ -56,17 +56,18 @@ _createdb()
     else
         _pg_databases
     fi
-} &&
+}
 complete -F _createdb -o default createdb
 
 # dropdb(1) completion
 #
 _dropdb()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev split=false
 
-    local split=false
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
+
     _split_longopt && split=true
 
     case $prev in
@@ -92,17 +93,18 @@ _dropdb()
     else
         _pg_databases
     fi
-} &&
+}
 complete -F _dropdb -o default dropdb
 
 # psql(1) completion
 #
 _psql()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev split=false
 
-    local split=false
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
+
     _split_longopt && split=true
 
     case $prev in
@@ -147,8 +149,9 @@ _psql()
         # return list of available databases
         _pg_databases
     fi
-} &&
+}
 complete -F _psql psql
+}
 
 # Local variables:
 # mode: shell-script

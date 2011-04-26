@@ -1,16 +1,17 @@
 # man(1) completion
 
-[[ $USERLAND == GNU || $UNAME == Darwin || $UNAME == FreeBSD || \
-    $UNAME == SunOS || $UNAME == Cygwin || $UNAME == OpenBSD ]] &&
+[ $USERLAND = GNU -o $UNAME = Darwin \
+  -o $UNAME = FreeBSD -o $UNAME = SunOS -o $UNAME = Cygwin \
+  -o $UNAME = OpenBSD ] &&
 _man()
 {
-    local cur prev words cword
-    _init_completion -n : || return
-
-    local i sect manpath manext mansect uname
+    local cur i prev sect manpath manext mansect uname
 
     manext="@([0-9lnp]|[0-9][px]|man|3pm)?(.@([gx]z|bz2|lzma|Z))"
     mansect="@([0-9lnp]|[0-9][px]|3pm)"
+
+    COMPREPLY=()
+    _get_comp_words_by_ref -n : cur prev
 
     if [[ "$prev" == -l ]]; then
         _filedir $manext
@@ -26,7 +27,7 @@ _man()
     fi
 
     uname=$( uname -s )
-    if [[ $uname == @(Linux|GNU|GNU/*|FreeBSD|Darwin|Cygwin|CYGWIN_*) ]]; then
+    if [[ $uname == @(Linux|GNU|GNU/*|FreeBSD|Cygwin|CYGWIN_*) ]]; then
         manpath=$( manpath 2>/dev/null || command man --path )
     else
         manpath=$MANPATH

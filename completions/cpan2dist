@@ -1,11 +1,12 @@
 # bash completion for cpan2dist
 
-have cpan2dist || return
-
+have cpan2dist &&
 _cpan2dist()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev packagelist cpandirs
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
 
     case $prev in
         --format)
@@ -30,8 +31,7 @@ _cpan2dist()
             --set-program --dist-opts --default-banlist \
             --default-ignorelist' -- $cur ) )
     else
-        local cpandirs=( "$HOME/.cpanplus/" "$HOME/.cpan/source/modules/" )
-        local packagelist
+        cpandirs=( "$HOME/.cpanplus/" "$HOME/.cpan/source/modules/" )
         for dir in ${cpandirs[@]}; do
             [[ -d "$dir" && -r "$dir/02packages.details.txt.gz" ]] && \
                 packagelist="$dir/02packages.details.txt.gz"

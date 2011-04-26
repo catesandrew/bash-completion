@@ -1,11 +1,12 @@
 # bash completion for links
 
-have links || return
-
+have links &&
 _links()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
 
     case $cur in
         --*)

@@ -5,10 +5,12 @@
 have killall || have pkill &&
 _killall()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
 
-    if [[ $cword -eq 1 && "$cur" == -* ]]; then
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
+
+    if [[ $COMP_CWORD -eq 1 && "$cur" == -* ]]; then
         _signals
     else
         _pnames
@@ -24,8 +26,10 @@ have pkill && complete -F _killall pkill
 [ $UNAME = Linux ] || have pgrep &&
 _pgrep()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
 
     _pnames
 

@@ -1,13 +1,14 @@
 # bash completion for ncftp
 
-have ncftp || return
-
+have ncftp &&
 _ncftp()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
 
-    if [[ $cword -eq 1 && -f ~/.ncftp/bookmarks ]]; then
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
+
+    if [[ $COMP_CWORD -eq 1 && -f ~/.ncftp/bookmarks ]]; then
         COMPREPLY=( $( compgen -W '$( sed -ne "s/^\([^,]\{1,\}\),.*$/\1/p" \
             ~/.ncftp/bookmarks )' -- "$cur" ) )
     fi

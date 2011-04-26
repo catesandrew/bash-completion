@@ -1,11 +1,12 @@
 # Gnatmake completion by Ralf_Schroth@t-online.de (Ralf Schroth)
 
-have gnatmake || return
-
+have gnatmake &&
 _gnatmake()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
 
     if [[ "$cur" == -* ]]; then
         # relevant (and less relevant ;-) )options completion

@@ -1,11 +1,11 @@
 # bash completion for dhclient
 
-have dhclient || return
-
-_dhclient()
+have dhclient && _dhclient()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
 
     case $prev in
         -cf|-lf|-pf|-sf)

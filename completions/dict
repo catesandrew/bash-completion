@@ -1,7 +1,6 @@
 # dict(1) completion
 
-have dict || have rdict || return
-
+{ have dict || have rdict; } && {
 _dictdata()
 {
     dict $host $port $1 2>/dev/null | sed -ne \
@@ -10,25 +9,26 @@ _dictdata()
 
 _dict()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev host port db dictfile
 
-    local host port db i
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
+    dictfile=/usr/share/dict/words
 
-    for (( i=1; i < cword; i++ )); do
-        case ${words[i]} in
+    for (( i=1; i < COMP_CWORD; i++ )); do
+        case ${COMP_WORDS[i]} in
             -h|--host)
-                host=${words[i+1]}
+                host=${COMP_WORDS[i+1]}
                 [ -n "$host" ] && host="-h $host"
                 i=$((++i))
                 ;;
             -p|--port)
-                port=${words[i+1]}
+                port=${COMP_WORDS[i+1]}
                 [ -n "$port" ] && port="-p $port"
                 i=$((++i))
                 ;;
             -d|--database)
-                db=${words[i+1]}
+                db=${COMP_WORDS[i+1]}
                 [ -n "$db" ] && host="-d $db"
                 i=$((++i))
                 ;;
@@ -62,11 +62,11 @@ _dict()
             ;;
     esac
 
-    local dictfile=/usr/share/dict/words
     [ -r $dictfile ] && \
         COMPREPLY=( $( compgen -W '$( cat $dictfile )' -- "$cur" ) )
-} &&
+}
 complete -F _dict -o default dict rdict
+}
 
 # Local variables:
 # mode: shell-script

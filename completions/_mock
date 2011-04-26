@@ -3,27 +3,27 @@
 
 # bash completion for mock
 
-have mock || return
-
+have mock &&
 _mock()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev plugins cfgdir split=false
 
-    local plugins='tmpfs root_cache yum_cache bind_mount ccache'
-    local cfgdir=/etc/mock count=0 i
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
+    plugins='tmpfs root_cache yum_cache bind_mount ccache'
+    cfgdir=/etc/mock
 
-    for i in "${words[@]}" ; do
-        [ $count -eq $cword ] && break
+    count=0
+    for i in "${COMP_WORDS[@]}" ; do
+        [ $count -eq $COMP_CWORD ] && break
         if [[ "$i" == --configdir ]] ; then
-            cfgdir="${words[((count+1))]}"
+            cfgdir="${COMP_WORDS[((count+1))]}"
         elif [[ "$i" == --configdir=* ]] ; then
             cfgdir=${i/*=/}
         fi
         count=$((++count))
     done
 
-    local split=false
     _split_longopt && split=true
 
     case $prev in

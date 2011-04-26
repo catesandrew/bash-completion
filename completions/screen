@@ -1,7 +1,6 @@
 # bash completion for screen
 
-have screen || return
-
+have screen &&
 _screen_sessions()
 {
     COMPREPLY=( $( compgen -W "$( command screen -ls | sed -ne \
@@ -11,7 +10,9 @@ _screen_sessions()
 _screen()
 {
     local cur prev words cword
-    _init_completion || return
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev words cword
 
     if ((cword > 2)); then
         case ${words[cword-2]} in

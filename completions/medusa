@@ -1,11 +1,13 @@
 # bash completion for medusa
 
-have medusa || return
-
+have medusa &&
 _medusa()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur prev
+
+    COMPREPLY=()
+    cur=`_get_cword`
+    prev=`_get_pword`
 
     case $prev in
         -h)

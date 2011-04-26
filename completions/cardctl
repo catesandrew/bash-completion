@@ -1,13 +1,14 @@
 # Linux cardctl(8) completion
 
-have cardctl || have pccardctl || return
-
+have cardctl || have pccardctl &&
 _cardctl()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
 
-    if [ $cword -eq 1 ]; then
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
+
+    if [ $COMP_CWORD -eq 1 ]; then
         COMPREPLY=( $( compgen -W 'status config ident suspend \
             resume reset eject insert scheme' -- "$cur" ) )
     fi

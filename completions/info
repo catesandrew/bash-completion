@@ -1,11 +1,12 @@
 # bash completion for info
 
-have info || return
-
+have info &&
 _info()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur i infopath
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur
 
     _expand || return 0
 
@@ -15,7 +16,7 @@ _info()
         return 0
     fi
 
-    local i infopath=/usr/share/info
+    infopath='/usr/share/info'
 
     if [ "${INFOPATH: -1:1}" == ':' ]; then
         infopath=${INFOPATH}${infopath}

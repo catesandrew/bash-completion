@@ -1,7 +1,6 @@
 # mplayer(1) completion
 
-have mplayer || return
-
+have mplayer && {
 _mplayer_options_list()
 {
     cur=${cur%\\}
@@ -12,10 +11,11 @@ _mplayer_options_list()
 
 _mplayer()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cmd cur prev i j k=0
 
-    local cmd=${words[0]} i j k=0
+    COMPREPLY=()
+    cmd=${COMP_WORDS[0]}
+    _get_comp_words_by_ref cur prev
 
     case $prev in
         -[av][cfo]|-[av]fm|-vop|-fstype|-demuxer|-o[av]c|-of|-profile| \
@@ -38,7 +38,8 @@ _mplayer()
                 _filedir ttf
             fi
             local IFS=$'\n'
-            COMPREPLY+=( $( compgen -W '$( fc-list 2>/dev/null )' -- "$cur" ) )
+            COMPREPLY=( "${COMPREPLY[@]}"
+                $( compgen -W '$( fc-list 2>/dev/null )' -- "$cur" ) )
             return 0
             ;;
         -sub)
@@ -255,8 +256,9 @@ _mplayer()
     esac
 
     return 0
-} &&
+}
 complete -F _mplayer mplayer mencoder gmplayer kplayer
+}
 
 # Local variables:
 # mode: shell-script

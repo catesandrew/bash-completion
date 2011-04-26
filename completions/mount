@@ -4,7 +4,8 @@
 # query the server for a list of all available exports and complete on
 # that instead.
 #
-have mount || return
+have mount &&
+{
 
 # Just like COMPREPLY=(`compgen -W "${COMPREPLY[*]}" -- "$cur"`), only better!
 #
@@ -76,10 +77,10 @@ _linux_fstab()
 
 _mount()
 {
-    local cur prev words cword
-    _init_completion -n : || return
+    local cur sm host prev
 
-    local sm host
+    COMPREPLY=()
+    _get_comp_words_by_ref -n : cur prev
 
     case $prev in
         -t|--types)
@@ -136,10 +137,11 @@ complete -F _mount -o default -o dirnames mount
 have umount &&
 _umount()
 {
-    local cur prev words cword
-    _init_completion || return
+    local cur
+    _get_comp_words_by_ref cur
+    COMPREPLY=()
 
-    if [[ $OSTYPE == *linux* && -r /proc/mounts ]]; then
+    if [[ $(uname -s) = Linux && -r /proc/mounts ]]; then
         # Linux /proc/mounts is properly quoted. This is important when
         # unmounting usb devices with pretty names.
         _linux_fstab < /proc/mounts
@@ -151,6 +153,8 @@ _umount()
     return 0
 } &&
 complete -F _umount -o dirnames umount
+
+}
 
 # Local variables:
 # mode: shell-script
