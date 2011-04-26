@@ -48,6 +48,7 @@ bashcomp_DATA = abook \
 		gcc \
 		gcl \
 		gdb \
+		gem \
 		genisoimage \
 		getent \
 		gkrellm \
@@ -70,6 +71,7 @@ bashcomp_DATA = abook \
 		isql \
 		jar \
 		java \
+		jruby \
 		k3b \
 		kldload \
 		larch \
@@ -128,6 +130,8 @@ bashcomp_DATA = abook \
 		qdbus \
 		qemu \
 		quota-tools \
+		rails \
+		rake \
 		rcs \
 		rdesktop \
 		reptyr \
@@ -141,6 +145,7 @@ bashcomp_DATA = abook \
 		rrdtool \
 		rsync \
 		rtcwake \
+		ruby \
 		samba \
 		sbcl \
 		screen \
