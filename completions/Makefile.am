@@ -10,6 +10,7 @@ bashcomp_DATA = abook \
 		automake \
 		autorpm \
 		bash-builtins \
+		bashmarks \
 		bind-utils \
 		bitkeeper \
 		bittorrent \
@@ -51,6 +52,7 @@ bashcomp_DATA = abook \
 		gem \
 		genisoimage \
 		getent \
+		git \
 		gkrellm \
 		gnatmake \
 		gpg \
@@ -165,6 +167,7 @@ bashcomp_DATA = abook \
 		sysv-rc \
 		tar \
 		tcpdump \
+		tig \
 		unace \
 		unrar \
 		update-alternatives \
