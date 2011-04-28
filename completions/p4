@@ -1,7 +1,7 @@
 # Perforce completion by Frank Cusack <frank@google.com>
-# Perforce completion updated by gabor_maghera
+# Perforce completion updated by andrew_may
 # Located at public.perforce.com:8080/ 
-# //guest/gabor_maghera/p4_bash_complete
+# //guest/andrew_may/p4_bash_complete
  
 # Perforce completion by Frank Cusack
 #  depot path completion by Andrew May
@@ -69,11 +69,8 @@ _p4_depot_path_complete()
  
 _p4()
 {
-  local cur prev prev2 words cword
-  _init_completion || return
-   
+  local cur prev prev2 p4commands p4filetypes p4globalopts 
   local i cmd opts
-  local p4commands p4filetypes p4globalopts
  
   COMPREPLY=()
   i=1
@@ -291,7 +288,7 @@ _p4()
   fi
  
   return 0
-} &&
+} 
 complete -F _p4 -o default p4 g4
  
 # Local variables:
