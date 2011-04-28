@@ -162,6 +162,7 @@ bashcomp_DATA = abook \
 		sshfs \
 		strace \
 		svk \
+		svn \
 		sysbench \
 		sysctl \
 		sysv-rc \
