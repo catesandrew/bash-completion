@@ -59,6 +59,7 @@ bashcomp_DATA = abook \
 		gpg2 \
 		gzip \
 		heimdal \
+		heroku \
 		hping2 \
 		iconv \
 		iftop \
