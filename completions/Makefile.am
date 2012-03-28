@@ -111,6 +111,7 @@ bashcomp_DATA = abook \
 		ncftp \
 		net-tools \
 		nmap \
+		npm \
 		ntpdate \
 		open \
 		openldap \
